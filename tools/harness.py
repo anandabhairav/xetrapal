@@ -1,3 +1,1 @@
-import sys
-sys.path.append("/opt/xetrapal/lib")
-from xetrapal import *
+import xetrapal
