@@ -52,7 +52,18 @@ def get_section(config,sectionname):
 		c.read_dict(a)
 		return c
 		
-
+def get_jeeva_config(name=None,datapath=None,sessionpathprefix=None):
+	if datapath==None:
+		baselogger.error("Need a datapath")
+		return None
+	if sessionpathprefix==None:
+		sessionpathprefix="JeevaSession"
+	configdict={"Jeeva":{"datapath":datapath,"sessionpathprefix":sessionpathprefix}}
+	if name!=None:
+		configdict['Jeeva']['name']=name
+	c=configparser.ConfigParser()
+	c.read_dict(configdict)
+	return c
 def load_data_from_json(jsonpath):
 	data={}
 	if os.path.exists(jsonpath):

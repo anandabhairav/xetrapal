@@ -9,6 +9,13 @@ from uuid import *
 from Queue import Queue
 import threading
 
+def kill_jeeva(jeeva,logger=baselogger):
+		logger.info("Killing jeeva " + colored.stylize(jeeva.name,colored.fg("violet")))
+		jeeva.karta.kill=True
+		jeeva.queue.put("Die")
+		del(jeeva)
+	
+
 class Karta(threading.Thread):
 	def __init__(self,jeeva):
 		threading.Thread.__init__(self)
@@ -26,9 +33,6 @@ class Karta(threading.Thread):
 				self.jeeva.save_profile()
 				self.kill=True
 		
-#class Smarta(
-
-#class Vakta
 
 class Jeeva(object):
 	def __init__(self,config=None,configfile=None):

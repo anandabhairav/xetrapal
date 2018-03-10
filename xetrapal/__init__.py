@@ -33,6 +33,7 @@ from copy import deepcopy
 
 
 from .aadhaar import *
+from .astra import *
 from .Jeeva import *
 from .Vaahan import *
 from .Xetrapal import *
