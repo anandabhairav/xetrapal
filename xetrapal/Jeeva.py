@@ -31,8 +31,11 @@ class Karta(threading.Thread):
 #class Vakta
 
 class Jeeva(object):
-	def __init__(self,configfile):
-		self.config=load_config(configfile)
+	def __init__(self,config=None,configfile=None):
+		if configfile != None:
+			self.config=load_config(configfile)
+		else:
+			self.config=config
 		self.jsonprofile={}
 		try:
 			self.name=self.config.get("Jeeva","name")
@@ -43,10 +46,12 @@ class Jeeva(object):
 		self.logger.info("My name is "+ colored.stylize(self.name,colored.fg("red")))
 		self.setup_disk()
 		self.setup_memory()
-		self.save_profile()
+		self.start_session()
 		self.queue=Queue()
 		self.karta=Karta(self)
 		self.karta.start()
+		self.save_profile()
+		
 	def setup_disk(self):
 		self.datapath=self.config.get("Jeeva","datapath")
 		self.set_property("datapath",self.datapath)
@@ -57,7 +62,7 @@ class Jeeva(object):
 			os.mkdir(self.datapath)
 		else:
 			self.logger.info("I already have a datapath at the location %s" %colored.stylize(self.datapath,colored.fg("yellow")))
-		self.start_session()
+		
 	def setup_memory(self):
 		if os.path.exists(self.jeevajsonfile):
 			fileprofile=load_data_from_json(self.jeevajsonfile)
@@ -112,5 +117,8 @@ class Jeeva(object):
 		sessiondata['sessionlog']=self.sessionlogfile
 		self.set_property("lastsession",sessiondata)
 	
-		
+	def save_config(self,filename):
+		self.logger.warning("Saving config file in plain text in file " + colored.stylize(filename,colored.fg("yellow")))
+		with open(filename,"w") as configfile:
+			self.config.write(configfile)
 	
