@@ -1,7 +1,7 @@
 
-
 from .jeeva import *
 from .vaahan import *
+from .fbastras import *
 class Xetrapal(Jeeva):
 	def __init__(self,*args, **kwargs):
 		super(Xetrapal,self).__init__(*args, **kwargs)
@@ -55,3 +55,10 @@ class Xetrapal(Jeeva):
 		astra=self.astras.pop(astraname)
 		self.update_astras()
 		return astra
+	def start_karta(self):
+		self.karta=Karta.start(jeeva=self)
+	def login_fb(self):
+		if "fbbrowser" not in self.astras.keys():
+			self.astras['fbbrowser']=get_browser(logger=self.logger)
+		self.karta.tell({"msg":"run","func":fb_login,"args":(self.astras['fbbrowser'],get_section(self.config,"Facebook")),"kwargs":{"logger":self.logger}})
+	

@@ -8,6 +8,7 @@ import colored
 from uuid import *
 from Queue import Queue
 import threading
+import pykka
 
 def kill_jeeva(jeeva,logger=baselogger):
 		logger.info("Killing jeeva " + colored.stylize(jeeva.name,colored.fg("violet")))
@@ -15,7 +16,7 @@ def kill_jeeva(jeeva,logger=baselogger):
 		jeeva.queue.put("Die")
 		del(jeeva)
 	
-
+'''
 class Karta(threading.Thread):
 	def __init__(self,jeeva):
 		threading.Thread.__init__(self)
@@ -33,6 +34,41 @@ class Karta(threading.Thread):
 				self.jeeva.save_profile()
 				self.kill=True
 		
+'''
+class Karta(pykka.ThreadingActor):
+	def __init__(self,jeeva):
+		super(Karta,self).__init__()
+		#threading.Thread.__init__(self)
+		self.jeeva = jeeva
+		self.jeeva.logger.info("Karta initialized....")
+	def on_start(self):
+		self.jeeva.logger.info("Karta started")
+	def on_receive(self,message):
+		self.jeeva.logger.info("Received message " + str(message))
+		if message['msg']=="run":
+			self.jeeva.logger.info("Trying to run " + str(message['func']))
+			self.jeeva.logger.info("Setting logger to own logger")
+			#message['kwargs']['logger']=self.jeeva.logger
+			message['func'](*message['args'],**message['kwargs'])
+		if message['msg']=="get":
+			self.jeeva.logger.info("Trying to run " + str(message['func']))
+			self.jeeva.logger.info("Setting logger to own logger")
+			message['kwargs']['logger']=self.jeeva.logger
+			returnvalue=message['func'](*message['args'],**message['kwargs'])
+			self.jeeva.logger.info("Returning value " + str(returnvalue))
+			return returnvalue
+	'''
+	def run(self):
+		self.jeeva.logger.info("Karta waiting for commands....\n")
+		while self.kill != True:
+			command=self.jeeva.queue.get()
+			self.jeeva.logger.info("Got command - " + command)
+			if command == "Die":
+				self.jeeva.logger.info("Dying")
+				self.jeeva.save_profile()
+				self.kill=True
+	'''
+
 
 class Jeeva(object):
 	def __init__(self,config=None,configfile=None):
@@ -51,11 +87,10 @@ class Jeeva(object):
 		self.setup_disk()
 		self.setup_memory()
 		self.start_session()
-		self.queue=Queue()
-		self.karta=Karta(self)
-		self.karta.start()
+		#self.karta=Karta(self)
+		#self.karta.start()
 		self.save_profile()
-		
+		self.kartarefs=[]
 	def setup_disk(self):
 		self.datapath=self.config.get("Jeeva","datapath")
 		self.set_property("datapath",self.datapath)
@@ -125,4 +160,5 @@ class Jeeva(object):
 		self.logger.warning("Saving config file in plain text in file " + colored.stylize(filename,colored.fg("yellow")))
 		with open(filename,"w") as configfile:
 			self.config.write(configfile)
+	
 	
