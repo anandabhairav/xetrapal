@@ -11,7 +11,10 @@ __________
                 ||     ||
 
 हिन्दी में सोशियल मीडिया का अध्ययन 
+'''
 
+'''
+यह एक इनिट फ़ाइल है, जो कि पाइथन के हर पैकेज में होनी अनिवार्य है। 
 '''
 
 __author__ = 'Ananda Bhairav Nath <anandabhairavnath@gmail.com>'
@@ -31,8 +34,12 @@ from collections import namedtuple
 #To make copies of objects
 from copy import deepcopy
 
-
-from .aadhaar import *
+'''
+यहां हम अपने पैकेज के सब पैकेज लोड कर रहे हैं
+किसी भी सब पैकेज को समझने के लिये उसके पाइथन फ़ाइल को देखें, 
+जैसे की, aadhaar नामक सब पैकेज के बारे में जानने के लिये aadhaar.py नामक फ़ाइल देखें  
+'''
+from .aadhaar import *  
 from .astra import *
 from .Jeeva import *
 from .Vaahan import *

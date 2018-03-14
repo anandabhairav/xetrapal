@@ -34,7 +34,7 @@ class Xetrapal(Jeeva):
 		self.set_property("vaahans",vaahans)
 		self.save_profile()
 	
-	
+
 	def add_vaahan(self,vaahan):
 		self.vaahans[vaahan.name]=vaahan
 		self.update_vaahans()
