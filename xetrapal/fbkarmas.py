@@ -1,7 +1,14 @@
-from .astra import *
+#coding: utf-8
+import time
+from selenium.webdriver.common.keys import Keys
+'''
+यहां हम फेसबुक सम्बन्धी अस्त्रों का उल्लेख करेंगे 
+'''
+#from .astra import *
+import astra
 
-
-def fb_login(browser,fbconfig,logger=baselogger):
+#Fire and Forget Astras, to be run with {'msg':'run','func':function_object,'args':(),'kwargs':{}}
+def fb_login(browser,fbconfig,logger=astra.baselogger):
 		fbusr=fbconfig.get("Facebook","fbusername")
 		fbpwd=fbconfig.get("Facebook","fbpassword")
 		# or you can use Chrome(executable_path="/usr/bin/chromedriver")
@@ -21,7 +28,7 @@ def fb_login(browser,fbconfig,logger=baselogger):
 		except Exception as exception:
 			logger.error("Could not log into FB.."+ repr(exception))
 
-def fb_search(browser,searchstring,logger=baselogger):
+def fb_search(browser,searchstring,logger=astra.baselogger):
 		logger.info("Searching FB for " + searchstring)
 		searchbar=browser.find_element_by_name("q")
 		searchbar.clear()

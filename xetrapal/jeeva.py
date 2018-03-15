@@ -1,40 +1,18 @@
+#coding: utf-8
 #from .aadhaar import 
 import os
-from .aadhaar import *
-from .astra import *
+from .aadhaar import XPAL_LOG_FORMAT
+import  karma
+#from .karma import *
+import  astra
+#from .astra import *
 from datetime import datetime
 import colored
 #UUIDs for everyone
-from uuid import *
-from Queue import Queue
-import threading
+from uuid import uuid4
 import pykka
+import coloredlogs,logging
 
-def kill_jeeva(jeeva,logger=baselogger):
-		logger.info("Killing jeeva " + colored.stylize(jeeva.name,colored.fg("violet")))
-		jeeva.karta.kill=True
-		jeeva.queue.put("Die")
-		del(jeeva)
-	
-'''
-class Karta(threading.Thread):
-	def __init__(self,jeeva):
-		threading.Thread.__init__(self)
-		self.jeeva = jeeva
-		self.kill=False
-		self.jeeva.logger.info("Karta initialized....")
-		
-	def run(self):
-		self.jeeva.logger.info("Karta waiting for commands....\n")
-		while self.kill != True:
-			command=self.jeeva.queue.get()
-			self.jeeva.logger.info("Got command - " + command)
-			if command == "Die":
-				self.jeeva.logger.info("Dying")
-				self.jeeva.save_profile()
-				self.kill=True
-		
-'''
 class Karta(pykka.ThreadingActor):
 	def __init__(self,jeeva):
 		super(Karta,self).__init__()
@@ -57,23 +35,12 @@ class Karta(pykka.ThreadingActor):
 			returnvalue=message['func'](*message['args'],**message['kwargs'])
 			self.jeeva.logger.info("Returning value " + str(returnvalue))
 			return returnvalue
-	'''
-	def run(self):
-		self.jeeva.logger.info("Karta waiting for commands....\n")
-		while self.kill != True:
-			command=self.jeeva.queue.get()
-			self.jeeva.logger.info("Got command - " + command)
-			if command == "Die":
-				self.jeeva.logger.info("Dying")
-				self.jeeva.save_profile()
-				self.kill=True
-	'''
-
+	
 
 class Jeeva(object):
 	def __init__(self,config=None,configfile=None):
 		if configfile != None:
-			self.config=load_config(configfile)
+			self.config=karma.load_config(configfile)
 		else:
 			self.config=config
 		self.jsonprofile={}
@@ -82,7 +49,7 @@ class Jeeva(object):
 		except:
 			self.name="Jeeva-"+str(uuid4())
 		self.set_property("name",self.name)
-		self.logger=get_xpal_logger(self.name)
+		self.logger=astra.get_xpal_logger(self.name)
 		self.logger.info("My name is "+ colored.stylize(self.name,colored.fg("red")))
 		self.setup_disk()
 		self.setup_memory()
@@ -104,7 +71,7 @@ class Jeeva(object):
 		
 	def setup_memory(self):
 		if os.path.exists(self.jeevajsonfile):
-			fileprofile=load_data_from_json(self.jeevajsonfile)
+			fileprofile=karma.load_data_from_json(self.jeevajsonfile)
 			if fileprofile!={}:
 				self.jsonprofile=fileprofile
 		self.set_property("name",self.name)
@@ -117,10 +84,10 @@ class Jeeva(object):
 		else:
 			return None
 	def show_profile(self):
-		self.logger.info("\n"+get_color_json(self.jsonprofile))
+		self.logger.info("\n"+karma.get_color_json(self.jsonprofile))
 	def save_profile(self):
 		self.logger.info("Saving own JSON profile to file %s" %colored.stylize(self.jeevajsonfile,colored.fg("yellow")))
-		save_data_to_jsonfile(self.jsonprofile,filename=self.jeevajsonfile)
+		karma.save_data_to_jsonfile(self.jsonprofile,filename=self.jeevajsonfile)
 	
 
 	def log_to_disk(self):

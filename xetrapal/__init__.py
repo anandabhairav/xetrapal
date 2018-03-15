@@ -41,8 +41,8 @@ from copy import deepcopy
 '''
 from .aadhaar import *  
 from .astra import *
-from .Jeeva import *
-from .Vaahan import *
+from .jeeva import *
+from .vaahan import *
 from .Xetrapal import *
 
 
