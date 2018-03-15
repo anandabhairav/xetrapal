@@ -1,4 +1,3 @@
-#coding: utf-8
 #from .aadhaar import 
 import os
 from .aadhaar import XPAL_LOG_FORMAT
