@@ -1,3 +1,4 @@
+#coding: utf-8
 #from .aadhaar import 
 from .astra import *
 from .jeeva import *
