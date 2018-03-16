@@ -9,32 +9,8 @@ from datetime import datetime
 import colored
 #UUIDs for everyone
 from uuid import uuid4
-import pykka
-import coloredlogs,logging
 
-class Karta(pykka.ThreadingActor):
-	def __init__(self,jeeva):
-		super(Karta,self).__init__()
-		#threading.Thread.__init__(self)
-		self.jeeva = jeeva
-		self.jeeva.logger.info("Karta initialized....")
-	def on_start(self):
-		self.jeeva.logger.info("Karta started")
-	def on_receive(self,message):
-		self.jeeva.logger.info("Received message " + str(message))
-		if message['msg']=="run":
-			self.jeeva.logger.info("Trying to run " + str(message['func']))
-			self.jeeva.logger.info("Setting logger to own logger")
-			#message['kwargs']['logger']=self.jeeva.logger
-			message['func'](*message['args'],**message['kwargs'])
-		if message['msg']=="get":
-			self.jeeva.logger.info("Trying to run " + str(message['func']))
-			self.jeeva.logger.info("Setting logger to own logger")
-			message['kwargs']['logger']=self.jeeva.logger
-			returnvalue=message['func'](*message['args'],**message['kwargs'])
-			self.jeeva.logger.info("Returning value " + str(returnvalue))
-			return returnvalue
-	
+import coloredlogs,logging
 
 class Jeeva(object):
 	def __init__(self,config=None,configfile=None):
@@ -122,9 +98,6 @@ class Jeeva(object):
 		sessiondata['sessionlog']=self.sessionlogfile
 		self.set_property("lastsession",sessiondata)
 	
-	def save_config(self,filename):
-		self.logger.warning("Saving config file in plain text in file " + colored.stylize(filename,colored.fg("yellow")))
-		with open(filename,"w") as configfile:
-			self.config.write(configfile)
+	
 	
 	

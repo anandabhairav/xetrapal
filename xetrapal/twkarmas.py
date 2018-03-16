@@ -4,14 +4,16 @@
 '''
 #from .astra import *
 import astra
+import colored
 
 #Fire and Forget Astras, to be run with {'msg':'run','func':function_object,'args':(),'kwargs':{}}
-def twython_check_auth(twython,twconfig,logger=astra.baselogger):
-		logger.info("Trying to check if our Twython is authenticated ...")
-		try:
-			logger.info("Twython is authenticated")
-		except Exception as exception:
-			logger.error("Twython auth check got..."+ repr(exception))
+def twython_check_auth(tw,logger=astra.baselogger):
+    logger.info("Trying to check if our Twython is authenticated ...")
+    try:
+        creds=tw.verify_credentials()
+        logger.info("Twython is authenticated as " + colored.stylize(creds['name'],colored.fg("red")))
+    except Exception as exception:
+        logger.error("Twython auth check got..."+ repr(exception))
 
 
 

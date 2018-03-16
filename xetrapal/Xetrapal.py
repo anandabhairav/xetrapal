@@ -7,7 +7,8 @@ import fbkarmas
 import twkarmas
 import colored
 
-
+import pykkakarta
+import thespiankarta	
 
 class Xetrapal(jeeva.Jeeva):
     def __init__(self,*args, **kwargs):
@@ -62,14 +63,30 @@ class Xetrapal(jeeva.Jeeva):
         droppedastra=self.astras.pop(astraname)
         self.update_astras()
         return droppedastra
-    def start_karta(self):
-        self.karta=jeeva.Karta.start(jeeva=self)
-
-    def get_fb_astra(self,fbconfig=None):
+    def start_pykka_karta(self):
+        kartaref=pykkakarta.Karta.start(jeeva=self)
+        self.kartarefs.append(kartaref)
+        return kartaref
+    def start_thespian_karta(self):
+        kartaref=thespiankarta.vidhata.createActor(thespiankarta.Karta)
+        self.kararefs.append(kartaref)
+        return kartaref
+    def get_fb_browser(self,fbconfig=None):
         if fbconfig==None:
             if "Facebook" in self.config.sections():
                 fbconfig=karma.get_section(self.config,"Facebook")
+        fbbrowser=astra.get_browser(logger=self.logger)
+        fbkarmas.fb_login(fbbrowser,fbconfig,logger=self.logger)
         if "fbbrowser" not in self.astras.keys():
-           self.astras['fbbrowser']=astra.get_browser(logger=self.logger)
-        self.karta.tell({"msg":"run","func":fbkarmas.fb_login,"args":(self.astras['fbbrowser'],astra.get_section(fbconfig,"Facebook")),"kwargs":{"logger":self.logger}})
-    
+            self.add_astra('fbbrowser',fbbrowser)
+        return fbbrowser
+    def get_twython(self,twconfig=None):
+        if twconfig==None:
+            if "Twython" in self.config.sections():
+                twconfig=karma.get_section(self.config,"Twython")
+        tw=astra.get_twython(twconfig,logger=self.logger)
+        twkarmas.twython_check_auth(tw,logger=self.logger)
+        tw.verify_credentials()
+        if "twython" not in self.astras.keys():
+            self.add_astra('twython',tw)
+        return tw

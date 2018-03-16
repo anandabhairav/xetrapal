@@ -28,9 +28,9 @@ def fb_login(browser,fbconfig,logger=astra.baselogger):
 		except Exception as exception:
 			logger.error("Could not log into FB.."+ repr(exception))
 
-def fb_search(browser,searchstring,logger=astra.baselogger):
+def fb_search(fbbrowser,searchstring,logger=astra.baselogger):
 		logger.info("Searching FB for " + searchstring)
-		searchbar=browser.find_element_by_name("q")
+		searchbar=fbbrowser.find_element_by_name("q")
 		searchbar.clear()
 		searchbar.send_keys(searchstring)
 		searchbar.send_keys(Keys.ENTER)

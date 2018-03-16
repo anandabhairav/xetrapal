@@ -111,15 +111,19 @@ def get_xpal_logger(name):
 	coloredlogs.install(level="DEBUG",logger=xpallogger,fmt=XPAL_CONSOLE_FORMAT,level_styles=XPAL_LEVEL_STYLES,field_styles=XPAL_FIELD_STYLES)
 	return xpallogger
 
-baselogger=get_xpal_logger("XetrapalRoot")
+baselogger=get_xpal_logger("Xpal-Sutradhar")
 
 #Get a Twython to work with twitter
 def get_twython(config,logger=baselogger):
-	logger.info("Trying to get a twython to work with twitter")
-	try:
-		t=twython.Twython(app_key=config.get("Twython",'app_key'),app_secret=config.get("Twython",'app_secret'),oauth_token=config.get("Twython",'oauth_token'),oauth_token_secret=config.get("Twython",'oauth_token_secret'))	
+    logger.info("Trying to get a twython to work with twitter")
+    app_key=config.get("Twython",'app_key')
+    app_secret=config.get("Twython",'app_secret')
+    oauth_token=config.get("Twython",'oauth_token')
+    oauth_token_secret=config.get("Twython",'oauth_token_secret')
+    try:
+		t=twython.Twython(app_key,app_secret,oauth_token,oauth_token_secret)	
 		return t
-	except Exception as e:
+    except Exception as e:
 		logger.error("Could not get twitter config because %s" %str(e))
 		return None
 		
