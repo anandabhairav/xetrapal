@@ -15,7 +15,7 @@ import time,os,urllib2,colored
 import json
 #To get some colored outputs
 from pygments import highlight, lexers, formatters
-from datetime import datetime
+
 from uuid import uuid4
 from .aadhaar import XPAL_WAIT_TIME
 import astra

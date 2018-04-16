@@ -131,7 +131,7 @@ def get_twython(config,logger=baselogger):
 def get_googledriver(config,logger=baselogger):
 	logger.info("Trying to log into Google drive")
 	try:
-		gc=pygsheets.authorize(outh_file=config['outhfile'],outh_nonlocal=True,outh_creds_store=config['outhstore'])
+		gc=pygsheets.authorize(outh_file=config.get("Pygsheets",'outhfile'),outh_nonlocal=True,outh_creds_store=config.get("Pygsheets",'outhstore'))
 		return gc
 	except Exception as e:
 		logger.error("Could not get twitter config because %s" %str(e))

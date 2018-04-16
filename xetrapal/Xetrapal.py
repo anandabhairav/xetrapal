@@ -90,3 +90,11 @@ class Xetrapal(jeeva.Jeeva):
         if "twython" not in self.astras.keys():
             self.add_astra('twython',tw)
         return tw
+    def get_googledriver(self,gcconfig=None):
+        if gcconfig==None:
+            if "Pygsheets" in self.config.sections():
+                gcconfig=karma.get_section(self.config,"Pygsheets")
+        gc=astra.get_googledriver(gcconfig,logger=self.logger)
+        if "pygsheet" not in self.astras.keys():
+            self.add_astra('pygsheet',gc)
+        return gc
