@@ -9,7 +9,7 @@ XPAL_LEVEL_STYLES={'info': {'color': 'blue'}, 'notice': {'color': 'magenta'}, 'v
 
 XPAL_CONSOLE_FORMAT="%(asctime)s %(name)s-%(threadName)s-[%(funcName)s] %(levelname)s : %(message)s"
 
-XPAL_LOG_FORMAT="%(asctime)s %(hostname)s %(name)s[%(funcName)s] %(levelname)s : %(message)s"
+XPAL_LOG_FORMAT="%(asctime)s %(hostname)s %(name)s-%(threadName)s-[%(funcName)s] %(levelname)s : %(message)s"
 
 XPAL_WAIT_TIME={"short":5,"medium":10,"long":30}
 

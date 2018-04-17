@@ -20,10 +20,13 @@ def twython_check_auth(tw,logger=astra.baselogger):
 #Get value Astras, to be run with {'msg':'get','func':function_object,'args':(),'kwargs':{}}
 #Use 
 
-def twython_search(twython,searchstring,logger=astra.baselogger,count=100):
+def twython_search(tw,searchstring,logger=astra.baselogger,tcount=100):
     results=[]
     logger.info("Searching Twitter for " + searchstring)
-    while len(results)<count:
-        results
-        
-    return results
+    results=tw.search(q=searchstring,count=tcount)['statuses'] 
+    logger.info("Got " + str(len(results)))
+    while len(results)<tcount:
+        maxid=results[len(results)-1]['id']
+        results=results+tw.search(q=searchstring,count=tcount,max_id=maxid)['statuses']
+        logger.info("Got " + str(len(results)))
+    return results[:tcount]

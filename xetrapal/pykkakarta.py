@@ -26,5 +26,5 @@ class Karta(pykka.ThreadingActor):
 			self.jeeva.logger.info("Setting logger to own logger")
 			message['kwargs']['logger']=self.jeeva.logger
 			returnvalue=message['func'](*message['args'],**message['kwargs'])
-			self.jeeva.logger.info("Returning value " + str(returnvalue))
+			#self.jeeva.logger.info("Returning value " + str(returnvalue))
 			return returnvalue
