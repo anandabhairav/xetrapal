@@ -120,7 +120,7 @@ def scroll_to_bottom(browser,logger=astra.baselogger):
 		else:
 			browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 			ticks_at_bottom = 0
-		logger.info("At bottom of page")
+	logger.info("At bottom of page")
 		
 def close_modal(browser,logger=astra.baselogger):
 	browser.find_element_by_link_text("Close").click()
