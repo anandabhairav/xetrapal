@@ -24,6 +24,21 @@ import urllib2 #time,os
 #Getting our basics
 from .aadhaar import  XPAL_CONSOLE_FORMAT,XPAL_LEVEL_STYLES,XPAL_FIELD_STYLES
 
+class XpalTwitterStreamer(twython.TwythonStreamer):
+    def __init__(self,*args, **kwargs):
+        super(XpalTwitterStreamer,self).__init__(*args, **kwargs)
+        self.ofile=ofile
+    def on_success(self, data):
+        if 'text' in data:
+            with open(self.ofile,"a") as f:
+               f.write(data['text'])
+
+    def on_error(self, status_code, data):
+        print(status_code)
+
+        # Want to stop trying to get data because of the error?
+        # Uncomment the next line!
+        # self.disconnect()
 
 def get_color_json(dictionary):
 	formatted_json=get_formatted_json(dictionary)
@@ -122,6 +137,19 @@ def get_twython(config,logger=baselogger):
     oauth_token_secret=config.get("Twython",'oauth_token_secret')
     try:
 		t=twython.Twython(app_key,app_secret,oauth_token,oauth_token_secret)	
+		return t
+    except Exception as e:
+		logger.error("Could not get twitter config because %s" %str(e))
+		return None
+
+def get_twython_streamer(config,logger=baselogger):
+    logger.info("Trying to get a twython to work with twitter")
+    app_key=config.get("Twython",'app_key')
+    app_secret=config.get("Twython",'app_secret')
+    oauth_token=config.get("Twython",'oauth_token')
+    oauth_token_secret=config.get("Twython",'oauth_token_secret')
+    try:
+		t=XpalTwitterStreamer(app_key,app_secret,oauth_token,oauth_token_secret)	
 		return t
     except Exception as e:
 		logger.error("Could not get twitter config because %s" %str(e))

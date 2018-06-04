@@ -90,6 +90,14 @@ class Xetrapal(jeeva.Jeeva):
         if "twython" not in self.astras.keys():
             self.add_astra('twython',tw)
         return tw
+    def get_twython_streamer(self,twconfig=None):
+        if twconfig==None:
+            if "Twython" in self.config.sections():
+                twconfig=karma.get_section(self.config,"Twython")
+        tw=astra.get_twython_streamer(twconfig,logger=self.logger)
+        if "twythonstreamer" not in self.astras.keys():
+            self.add_astra('twythonstreamer',tw)
+        return tw
     def get_googledriver(self,gcconfig=None):
         if gcconfig==None:
             if "Pygsheets" in self.config.sections():
