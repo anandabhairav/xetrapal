@@ -4,8 +4,6 @@
 '''
 #from .astra import *
 import astra
-import colored
-import karma
 import urllib2,json
 #Fire and Forget Astras, to be run with {'msg':'run','func':function_object,'args':(),'kwargs':{}}
 
@@ -90,7 +88,6 @@ def build_cube(gc,sheetname=None,key=None,logger=astra.baselogger):
 	if sheetname != None:
 		logger.info("Trying to build cube from "+sheetname)
 		cubesheet=get_ssheet_by_name(sheetname)
-		
 		cubesheet=get_ssheet_by_key(key)
 	return cubesheet
 	

@@ -2,10 +2,6 @@
 '''
 
 '''
-import sys
-
-DEBUG=False
-
 
 #Configparser to load and read our configs
 import configparser

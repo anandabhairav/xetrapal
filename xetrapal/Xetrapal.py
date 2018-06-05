@@ -6,7 +6,8 @@ import jeeva
 import fbkarmas
 import twkarmas
 import colored
-
+import twastras
+import gdastras
 import pykkakarta
 import thespiankarta	
 
@@ -74,7 +75,7 @@ class Xetrapal(jeeva.Jeeva):
     def get_fb_browser(self,fbconfig=None):
         if fbconfig==None:
             if "Facebook" in self.config.sections():
-                fbconfig=karma.get_section(self.config,"Facebook")
+                fbconfig=karma.get_section(self.config,"Facebook",logger=self.logger)
         fbbrowser=astra.get_browser(logger=self.logger)
         fbkarmas.fb_login(fbbrowser,fbconfig,logger=self.logger)
         if "fbbrowser" not in self.astras.keys():
@@ -84,25 +85,25 @@ class Xetrapal(jeeva.Jeeva):
         if twconfig==None:
             if "Twython" in self.config.sections():
                 twconfig=karma.get_section(self.config,"Twython")
-        tw=astra.get_twython(twconfig,logger=self.logger)
+        tw=twastras.get_twython(twconfig,logger=self.logger)
         twkarmas.twython_check_auth(tw,logger=self.logger)
         tw.verify_credentials()
         if "twython" not in self.astras.keys():
             self.add_astra('twython',tw)
         return tw
-    def get_twython_streamer(self,twconfig=None):
+    def get_twython_streamer(self,twconfig=None,ofilename=None):
         if twconfig==None:
             if "Twython" in self.config.sections():
                 twconfig=karma.get_section(self.config,"Twython")
-        tw=astra.get_twython_streamer(twconfig,logger=self.logger)
+        tw=twastras.get_twython_streamer(twconfig,ofilename,logger=self.logger)
         if "twythonstreamer" not in self.astras.keys():
             self.add_astra('twythonstreamer',tw)
         return tw
-    def get_googledriver(self,gcconfig=None):
-        if gcconfig==None:
+    def get_googledriver(self,gdconfig=None):
+        if gdconfig==None:
             if "Pygsheets" in self.config.sections():
-                gcconfig=karma.get_section(self.config,"Pygsheets")
-        gc=astra.get_googledriver(gcconfig,logger=self.logger)
+                gdconfig=karma.get_section(self.config,"Pygsheets")
+        gd=gdastras.get_googledriver(gdconfig,logger=self.logger)
         if "pygsheet" not in self.astras.keys():
-            self.add_astra('pygsheet',gc)
-        return gc
+            self.add_astra('pygsheet',gd)
+        return gd

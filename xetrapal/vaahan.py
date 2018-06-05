@@ -1,11 +1,10 @@
 #coding: utf-8
 #from .aadhaar import 
-from .astra import *
-from .jeeva import *
+import jeeva
+import colored
 
 
-
-class Vaahan(Jeeva):
+class Vaahan(jeeva.Jeeva):
 	def __init__(self,*args, **kwargs):
 		super(Vaahan,self).__init__(*args, **kwargs)
 		self.astras={}
@@ -23,13 +22,13 @@ class Vaahan(Jeeva):
 		self.save_profile()
 	
 
-	def add_astra(self,astraname,astra):
-		self.astras[astraname]=astra
+	def add_astra(self,astraname,astrahandle):
+		self.astras[astraname]=astrahandle
 		self.update_astras()
 		
 	def drop_astra(self,astraname):
 		self.logger.info("Dropping astra " + colored.stylize(astraname,colored.fg("violet")))
-		astra=self.astras.pop(astraname)
+		astrahandle=self.astras.pop(astraname)
 		self.update_astras()
-		return astra
+		return astrahandle
 
