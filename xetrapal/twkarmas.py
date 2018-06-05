@@ -20,14 +20,20 @@ def twython_check_auth(tw,logger=astra.baselogger):
 #Get value Astras, to be run with {'msg':'get','func':function_object,'args':(),'kwargs':{}}
 #Use 
 
-def twython_search(tw,searchstring,logger=astra.baselogger,tcount=100):
+def twython_search(tw,searchstring,logger=astra.baselogger,tcount=100,maxtries=10):
     results=[]
     logger.info("Searching Twitter for " + searchstring)
     results=tw.search(q=searchstring,count=tcount)['statuses'] 
     #logger.info("Got " + str(len(results)))
+    tries=0
     while len(results)<tcount:
-        maxid=results[len(results)-1]['id']
+        if tries > maxtries:
+            break
+        maxid=results[-1]['id']
         results=results+tw.search(q=searchstring,count=tcount,max_id=maxid)['statuses']
         karma.wait(logger=logger)
+        tries+=1
     logger.info("Got " + str(len(results))+ " for search query " + searchstring)
     return results[:tcount]
+
+		
