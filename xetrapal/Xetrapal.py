@@ -107,3 +107,6 @@ class Xetrapal(jeeva.Jeeva):
         if "pygsheet" not in self.astras.keys():
             self.add_astra('pygsheet',gd)
         return gd
+    def post_tweet(self,tweet):
+        tweetmsg={'msg':'run','func':self.astras['twython'].update_status,'args':[],'kwargs':{'status':''} }
+        

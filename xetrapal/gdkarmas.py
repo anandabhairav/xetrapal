@@ -22,13 +22,13 @@ def lookup_ssheet(gc,sheetdict,logger=astra.baselogger):
 			return ssheet
 	return sheetdict
 	
-def get_ssheet(gc,key=None,name=None,logger=astra.baselogger):
+def get_ssheet(gd,key=None,name=None,logger=astra.baselogger):
 	if key==None and name==None:
 		return None
 	if key!=None:
-		return get_ssheet_by_key(gc,key)
+		return get_ssheet_by_key(gd,key)
 	if name!=None:
-		return get_ssheet_by_name(name)
+		return get_ssheet_by_name(gd,name)
 
 def create_new_ssheet(gc,title,folderid=None,logger=astra.baselogger):
 	for ssheet in gc.list_ssheets():
