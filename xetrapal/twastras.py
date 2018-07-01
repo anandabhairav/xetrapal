@@ -9,31 +9,51 @@ Created on Wed Jun  6 00:25:58 2018
 import twython
 import astra
 import colored
-
+import json
+import os
+from datetime import datetime
 class XpalTwitterStreamer(twython.TwythonStreamer):
-    def __init__(self,ofile,*args, **kwargs):
+    def __init__(self,ofile,logger,*args, **kwargs):
         super(XpalTwitterStreamer,self).__init__(*args, **kwargs)
         self.ofile=ofile
+        self.buffer=[]
+        self.logger=logger
+    def flush_buffer(self):
+        ofilejson=[]
+        if os.path.exists(self.ofile):
+            with open(self.ofile,"r") as f:
+                ofilejson=json.loads(f.read())
+        ofilejson+=self.buffer
+        with open(self.ofile,"w") as f:
+            f.write(json.dumps(ofilejson))
+        self.buffer=[]
     def on_success(self, data):
-        if 'text' in data:
-            with open(self.ofile,"a") as f:
-               f.write(data['text'].encode("utf8")+"\n")
-
+        #self.logger.info(data)
+        self.buffer.append(data)
+        if len(self.buffer)>10:
+            self.flush_buffer()
     def on_error(self, status_code, data):
         print(status_code)
 
         # Want to stop trying to get data because of the error?
         # Uncomment the next line!
         # self.disconnect()
-
-def get_twython_streamer(config,ofilename,logger=astra.baselogger):
+class XpalTwitterSheeter(XpalTwitterStreamer):
+     def __init__(self,sheetname,logger,*args, **kwargs):
+        super(XpalTwitterStreamer,self).__init__(*args, **kwargs)
+        #self.
+def get_twython_streamer(config,ofilename=None,logger=astra.baselogger):
+    
+    if ofilename==None:
+        ts=datetime.now()
+        ofilename="/tmp/TwythonStreamer-"+ts.strftime("%Y%b%d-%H%M%S"+".json")
     logger.info("Trying to get a twython streamer to work with twitter streams")
     app_key=config.get("Twython",'app_key')
     app_secret=config.get("Twython",'app_secret')
     oauth_token=config.get("Twython",'oauth_token')
     oauth_token_secret=config.get("Twython",'oauth_token_secret')
     try:
-        t=XpalTwitterStreamer(ofilename,app_key,app_secret,oauth_token,oauth_token_secret)
+        t=XpalTwitterStreamer(ofilename,logger,app_key,app_secret,oauth_token,oauth_token_secret)
         logger.info("Streamer logging at "  + colored.stylize(t.ofile,colored.fg("yellow")))
         return t
     except Exception as e:

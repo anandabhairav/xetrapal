@@ -25,12 +25,6 @@ __version__ = '0.0.1'
 
 #Named tuples help in keeping things in order
 from collections import namedtuple
-
-
-
-
-
-
 #To make copies of objects
 from copy import deepcopy
 

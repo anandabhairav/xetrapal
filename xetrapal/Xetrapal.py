@@ -8,8 +8,10 @@ import twkarmas
 import colored
 import twastras
 import gdastras
+import gdkarmas
 import pykkakarta
-import thespiankarta	
+import os
+#import thespiankarta	
 
 class Xetrapal(jeeva.Jeeva):
     def __init__(self,*args, **kwargs):
@@ -68,15 +70,15 @@ class Xetrapal(jeeva.Jeeva):
         kartaref=pykkakarta.Karta.start(jeeva=self)
         self.kartarefs.append(kartaref)
         return kartaref
-    def start_thespian_karta(self):
-        kartaref=thespiankarta.vidhata.createActor(thespiankarta.Karta)
-        self.kararefs.append(kartaref)
-        return kartaref
+   # def start_thespian_karta(self):
+   #     kartaref=thespiankarta.vidhata.createActor(thespiankarta.Karta)
+   #     self.kararefs.append(kartaref)
+   #     return kartaref
     def get_fb_browser(self,fbconfig=None):
         if fbconfig==None:
             if "Facebook" in self.config.sections():
                 fbconfig=karma.get_section(self.config,"Facebook",logger=self.logger)
-        fbbrowser=astra.get_browser(logger=self.logger)
+                fbbrowser=astra.get_browser(logger=self.logger)
         fbkarmas.fb_login(fbbrowser,fbconfig,logger=self.logger)
         if "fbbrowser" not in self.astras.keys():
             self.add_astra('fbbrowser',fbbrowser)
@@ -95,6 +97,8 @@ class Xetrapal(jeeva.Jeeva):
         if twconfig==None:
             if "Twython" in self.config.sections():
                 twconfig=karma.get_section(self.config,"Twython")
+        if ofilename==None:
+           ofilename=os.path.join(self.sessionpath,"TwythonStreamer.json")
         tw=twastras.get_twython_streamer(twconfig,ofilename,logger=self.logger)
         if "twythonstreamer" not in self.astras.keys():
             self.add_astra('twythonstreamer',tw)
@@ -108,5 +112,13 @@ class Xetrapal(jeeva.Jeeva):
             self.add_astra('pygsheet',gd)
         return gd
     def post_tweet(self,tweet):
-        tweetmsg={'msg':'run','func':self.astras['twython'].update_status,'args':[],'kwargs':{'status':''} }
+        tweetmsg=karma.get_aadesh('run',self.astras['twython'].update_status,kwargs={'status':tweet})
+        if self.kartarefs==[]:
+            tweetkarta=self.start_pykka_karta()
+        else:
+            tweetkarta=self.kartarefs[0]
+        tweetkarta.tell(tweetmsg)
+    def save_tweet_search_to_gdrive(self,searchstring,tcount=100,sheet_name=None):
+        gd=self.astras['pygsheet']
+        tw=self.astras['twython']
         

@@ -5,6 +5,8 @@ Created on Fri Mar 16 12:19:01 2018
 
 @author: anandabhairav
 """
+
+
 import pykka
 class Karta(pykka.ThreadingActor):
     def __init__(self,jeeva):
@@ -19,12 +21,13 @@ class Karta(pykka.ThreadingActor):
         self.jeeva.logger.info("Received message " + str(message))
         if message['msg']=="run":
             self.jeeva.logger.info("Trying to run " + str(message['func']))
-            self.jeeva.logger.info("Setting logger to own logger")
             #message['kwargs']['logger']=self.jeeva.logger
-            message['func'](*message['args'],**message['kwargs'])
+            try:
+                message['func'](*message['args'],**message['kwargs'])
+            except Exception as e:
+                self.jeeva.logger.error(repr(e))
         if message['msg']=="get":
-            self.jeeva.logger.info("Trying to run " + str(message['func']))
-            self.jeeva.logger.info("Setting logger to own logger")
+            self.jeeva.logger.info("Trying to get a return value from " + str(message['func']))
             try:
                 returnvalue=message['func'](*message['args'],**message['kwargs'])
                 return returnvalue

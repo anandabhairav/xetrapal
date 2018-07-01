@@ -107,7 +107,7 @@ def download_file(url,path=None,filename=None,prefix=None,suffix=None):
 #Getting a logger which keeps track of things on console
 def get_xpal_logger(name):
 	xpallogger=logging.getLogger(name)
-	coloredlogs.install(level="DEBUG",logger=xpallogger,fmt=XPAL_CONSOLE_FORMAT,level_styles=XPAL_LEVEL_STYLES,field_styles=XPAL_FIELD_STYLES)
+	coloredlogs.install(level="INFO",logger=xpallogger,fmt=XPAL_CONSOLE_FORMAT,level_styles=XPAL_LEVEL_STYLES,field_styles=XPAL_FIELD_STYLES)
 	return xpallogger
 
 baselogger=get_xpal_logger("Xpal-Sutradhar")

@@ -37,3 +37,18 @@ def twython_search(tw,searchstring,logger=astra.baselogger,tcount=100,maxtries=1
     return results[:tcount]
 
 		
+def get_ntweets_for_search(tw,search,tcount,maxtries=10,logger=astra.baselogger):
+    tweets=[]
+    p=tw.search(q=search,count=tcount)['statuses']
+    tries=0
+    while len(tweets)<tcount:
+        tweets=tweets+p
+        p=p+tw.search(q=search,count=100,max_id=p[-1]['id'])['statuses']
+        logger.info("Sleeping...")
+        karma.wait(logger=logger)
+        logger.info("Got %s tweets" %len(tweets))
+        tries+=1
+        if(tries>maxtries):
+            break
+    return tweets[:tcount]
+

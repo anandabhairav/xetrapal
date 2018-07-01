@@ -16,6 +16,9 @@ from uuid import uuid4
 from .aadhaar import XPAL_WAIT_TIME
 import astra
 
+
+
+
 def get_color_json(dictionary,logger=astra.baselogger):
 	formatted_json=get_formatted_json(dictionary)
 	colorful_json = highlight(unicode(formatted_json, 'UTF-8'), lexers.JsonLexer(), formatters.TerminalFormatter())
@@ -128,3 +131,9 @@ def save_config(config,filename,logger=astra.baselogger):
 		logger.warning("Saving config file in plain text in file " + colored.stylize(filename,colored.fg("yellow")))
 		with open(filename,"w") as configfile:
 			config.write(configfile)
+
+def get_aadesh(msg,func,args=[],kwargs={}):
+    aadesh={'msg':msg,'func':func,'args':args,'kwargs':kwargs}
+    return aadesh
+    
+    
