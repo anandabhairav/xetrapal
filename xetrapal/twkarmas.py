@@ -37,7 +37,7 @@ def twython_search(tw,searchstring,logger=astra.baselogger,tcount=100,maxtries=1
     return results[:tcount]
 
 		
-def get_ntweets_for_search(tw,search,tcount,maxtries=10,logger=astra.baselogger):
+def twython_get_ntweets_for_search(tw,search,tcount,geocode=None,maxtries=10,logger=astra.baselogger):
     tweets=[]
     p=tw.search(q=search,count=tcount)['statuses']
     tries=0
