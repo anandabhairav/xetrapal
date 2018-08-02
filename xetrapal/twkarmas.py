@@ -6,6 +6,7 @@
 import astra
 import colored
 import karma
+import pandas
 #Fire and Forget Astras, to be run with {'msg':'run','func':function_object,'args':(),'kwargs':{}}
 def twython_check_auth(tw,logger=astra.baselogger):
     logger.info("Trying to check if our Twython is authenticated ...")
@@ -37,18 +38,30 @@ def twython_search(tw,searchstring,logger=astra.baselogger,tcount=100,maxtries=1
     return results[:tcount]
 
 		
-def twython_get_ntweets_for_search(tw,search,tcount,geocode=None,maxtries=10,logger=astra.baselogger):
-    tweets=[]
-    p=tw.search(q=search,count=tcount)['statuses']
+def twython_get_ntweets_for_search(tw,search,tcount,geocode=None,maxtries=50,logger=astra.baselogger):
+    #tweets=[]
+    p=pandas.DataFrame(tw.search(q=search,count=tcount,tweet_mode="extended")['statuses'])
+    tweetdf=p.drop_duplicates(subset="full_text",keep="first").reset_index()
     tries=0
-    while len(tweets)<tcount:
-        tweets=tweets+p
-        p=p+tw.search(q=search,count=100,max_id=p[-1]['id'])['statuses']
+    while len(tweetdf)<tcount:
+        logger.info("Currently have %s tweets" %len(tweetdf))
+        if "id" in p.columns:
+            p=pandas.DataFrame(tw.search(q=search,count=tcount,tweet_mode="extended",max_id=p['id'].iloc[-1])['statuses'])
+        else:
+            logger.info(p.columns)
+        logger.info("Got %s more tweets" %len(p))
+        if len(p)>1:
+            p=p.drop_duplicates(subset="full_text",keep="first").reset_index(drop=True)
+        else:
+            logger.info("Empty tweetset")
+            break
+        logger.info("%s tweets are unique" %len(p))
+        tweetdf=pandas.concat([tweetdf,p])
+        tweetdf=tweetdf.drop_duplicates(subset="full_text",keep="first").reset_index(drop=True)
         logger.info("Sleeping...")
         karma.wait(logger=logger)
-        logger.info("Got %s tweets" %len(tweets))
+        logger.info("Got %s tweets" %len(tweetdf))
         tries+=1
         if(tries>maxtries):
             break
-    return tweets[:tcount]
-
+    return tweetdf.head(tcount)     

@@ -1,4 +1,4 @@
-#coding: utf-8
+ #coding: utf-8
 
 import astra
 import karma
@@ -93,6 +93,14 @@ class Xetrapal(jeeva.Jeeva):
         if "twython" not in self.astras.keys():
             self.add_astra('twython',tw)
         return tw
+    def get_tweepy(self,twconfig=None):
+        if twconfig==None:
+            if "Twython" in self.config.sections():
+                twconfig=karma.get_section(self.config,"Twython")
+        tweep=twastras.get_tweepy(twconfig,logger=self.logger)
+        if "tweepy" not in self.astras.keys():
+            self.add_astra("tweepy",tweep)
+        return tweep
     def get_twython_streamer(self,twconfig=None,ofilename=None):
         if twconfig==None:
             if "Twython" in self.config.sections():
