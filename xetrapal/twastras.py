@@ -13,6 +13,7 @@ import json
 import os
 from datetime import datetime
 import tweepy
+
 class XpalTwitterStreamer(twython.TwythonStreamer):
     def __init__(self,ofile,logger,*args, **kwargs):
         super(XpalTwitterStreamer,self).__init__(*args, **kwargs)
@@ -34,7 +35,8 @@ class XpalTwitterStreamer(twython.TwythonStreamer):
         if len(self.buffer)>10:
             self.flush_buffer()
     def on_error(self, status_code, data):
-        print(status_code)
+		print(status_code)
+
 
         # Want to stop trying to get data because of the error?
         # Uncomment the next line!
@@ -60,7 +62,7 @@ def get_twython_streamer(config,ofilename=None,logger=astra.baselogger):
     except Exception as e:
 		logger.error("Could not get twython streamer because %s" %repr(e))
 		return None
-    
+
 #Get a Twython to work with twitter
 def get_twython(config,logger=astra.baselogger):
     logger.info("Trying to get a twython to work with twitter")

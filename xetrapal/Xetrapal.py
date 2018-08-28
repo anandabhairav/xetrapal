@@ -8,7 +8,6 @@ import twkarmas
 import colored
 import twastras
 import gdastras
-import gdkarmas
 import pykkakarta
 import os
 #import thespiankarta	
@@ -126,6 +125,7 @@ class Xetrapal(jeeva.Jeeva):
         else:
             tweetkarta=self.kartarefs[0]
         tweetkarta.tell(tweetmsg)
+#To Do
     def save_tweet_search_to_gdrive(self,searchstring,tcount=100,sheet_name=None):
         gd=self.astras['pygsheet']
         tw=self.astras['twython']
