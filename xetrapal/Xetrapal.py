@@ -8,9 +8,13 @@ import twkarmas
 import colored
 import twastras
 import gdastras
+import gdkarmas
 import pykkakarta
 import os
-#import thespiankarta	
+import mojomailastras
+import telegramastras
+import telegramkarmas
+#import thespiankarta
 
 class Xetrapal(jeeva.Jeeva):
     def __init__(self,*args, **kwargs):
@@ -28,10 +32,10 @@ class Xetrapal(jeeva.Jeeva):
         else:
             for astraname in self.astras.keys():
                 astras[astraname]=str(type(self.astras[astraname]))
-    
+
         self.set_property("astras",astras)
         self.save_profile()
-    
+
     def update_vaahans(self):
         self.logger.info("Trying to update vaahans")
         vaahans={}
@@ -40,26 +44,26 @@ class Xetrapal(jeeva.Jeeva):
         else:
             for vaahanname in self.vaahans.keys():
                 vaahans[vaahanname]=str(type(self.vaahans[vaahanname]))
-    
+
         self.set_property("vaahans",vaahans)
         self.save_profile()
-    
+
 
     def add_vaahan(self,vaahan):
         self.vaahans[vaahan.name]=vaahan
         self.update_vaahans()
-    
+
     def release_vaahan(self,vaahanname):
         self.logger.info("Releasing vaahan " + colored.stylize(vaahanname,colored.fg("violet")))
         vaahan=self.vaahans.pop(vaahanname)
         self.update_vaahans()
         return vaahan
-        
+
 
     def add_astra(self,astraname,newastra):
         self.astras[astraname]=newastra
         self.update_astras()
-        
+
     def drop_astra(self,astraname):
         self.logger.info("Dropping astra " + colored.stylize(astraname,colored.fg("violet")))
         droppedastra=self.astras.pop(astraname)
@@ -129,4 +133,15 @@ class Xetrapal(jeeva.Jeeva):
     def save_tweet_search_to_gdrive(self,searchstring,tcount=100,sheet_name=None):
         gd=self.astras['pygsheet']
         tw=self.astras['twython']
-        
+    def get_mojogmail(self):
+         mm=mojomailastras.get_mojogmail(configfile=self.configfile,logger=self.logger)
+         if "mojomail" not in self.astras.keys():
+             self.add_astra("mojomail",mm)
+         return mm
+    def get_tg_bot(self,name,tokenfile):
+        tg_bot=telegramastras.get_bot_astra(name,tokenfile)
+        tg_bot['name']=name
+        tg_bot['offset']=0
+        if name not in self.astras.keys():
+            self.add_astra(name,tg_bot)
+        return tg_bot

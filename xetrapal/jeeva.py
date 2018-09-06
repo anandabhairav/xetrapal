@@ -1,4 +1,4 @@
-#from .aadhaar import 
+#from .aadhaar import
 import os
 from .aadhaar import XPAL_LOG_FORMAT
 import  karma
@@ -33,6 +33,7 @@ class Jeeva(object):
 		#self.karta.start()
 		self.save_profile()
 		self.kartarefs=[]
+		self.configfile=configfile
 	def setup_disk(self):
 		self.datapath=self.config.get("Jeeva","datapath")
 		self.set_property("datapath",self.datapath)
@@ -43,14 +44,14 @@ class Jeeva(object):
 			os.mkdir(self.datapath)
 		else:
 			self.logger.info("I already have a datapath at the location %s" %colored.stylize(self.datapath,colored.fg("yellow")))
-		
+
 	def setup_memory(self):
 		if os.path.exists(self.jeevajsonfile):
 			fileprofile=karma.load_data_from_json(self.jeevajsonfile)
 			if fileprofile!={}:
 				self.jsonprofile=fileprofile
 		self.set_property("name",self.name)
-		
+
 	def set_property(self,propertyname,value):
 		self.jsonprofile[propertyname]=value
 	def get_property(self,propertyname):
@@ -63,7 +64,7 @@ class Jeeva(object):
 	def save_profile(self):
 		self.logger.info("Saving own JSON profile to file %s" %colored.stylize(self.jeevajsonfile,colored.fg("yellow")))
 		karma.save_data_to_jsonfile(self.jsonprofile,filename=self.jeevajsonfile)
-	
+
 
 	def log_to_disk(self):
 		logFormatter=logging.Formatter(XPAL_LOG_FORMAT)
@@ -73,7 +74,7 @@ class Jeeva(object):
 		self.logger.addHandler(fileHandler)
 		self.sessionlogfile=os.path.join(self.sessionpath,"jeevasession.log")
 		self.logger.info("Saving messages to log at " + colored.stylize(self.sessionlogfile,colored.fg("yellow")))
-		
+
 	def start_session(self):
 		sessionpathprefix=self.config.get("Jeeva","sessionpathprefix")
 		ts=datetime.now()
@@ -97,7 +98,3 @@ class Jeeva(object):
 		self.log_to_disk()
 		sessiondata['sessionlog']=self.sessionlogfile
 		self.set_property("lastsession",sessiondata)
-	
-	
-	
-	
