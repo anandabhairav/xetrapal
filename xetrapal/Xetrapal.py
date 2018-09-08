@@ -138,10 +138,8 @@ class Xetrapal(jeeva.Jeeva):
          if "mojomail" not in self.astras.keys():
              self.add_astra("mojomail",mm)
          return mm
-    def get_tg_bot(self,name,tokenfile):
-        tg_bot=telegramastras.get_bot_astra(name,tokenfile)
-        tg_bot['name']=name
-        tg_bot['offset']=0
-        if name not in self.astras.keys():
-            self.add_astra(name,tg_bot)
+    def get_tg_bot(self):
+        tg_bot=telegramastras.XetrapalTelegramBot(self.config,logger=self.logger)
+        if tg_bot.name not in self.astras.keys():
+            self.add_astra(tg_bot.name,tg_bot)
         return tg_bot

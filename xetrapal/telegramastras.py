@@ -7,25 +7,57 @@ Created on Wed Jun  6 00:31:18 2018
 """
 
 import astra
-import sys
-
+import sys,os,json
+import pandas
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import Updater, CommandHandler
-
-class XetrapalBot:
-    def __init__(self,name,tokenfile,logger=astra.baselogger):
-        self.name=name
+import karma
+class XetrapalTelegramBot:
+    def __init__(self,config,logger=astra.baselogger):
+        self.name=config.get("TelegramBot","name")
+        self.statefile=config.get("TelegramBot","statefile")
         self.logger=logger
+        tokenfile=config.get("TelegramBot","tokenfile")
         with open(tokenfile,"r") as f:
-            self.token=f.read().strip()
-        self.updater=Updater(self.token)
-        self.offset=0
+            token=f.read().strip()
+        self.updater=Updater(token)
+        self.load_state()
+        if self.state=={}:
+            self.users=[]
+            self.offset=0
+            self.save_state()
+
+
+    def save_state(self):
+        self.state['offset']=self.offset
+        self.state['users']=self.users
+        with open(self.statefile,"w") as f:
+            f.write(json.dumps(self.state))
+    def load_state(self):
+        if os.path.exists(self.statefile):
+            with open(self.statefile,"r") as f:
+                self.state=json.loads(f.read().strip())
+            self.offset=int(self.state['offset'])
+            self.users=self.state['users']
+        else:
+            self.state={}
+
     def get_latest_updates(self):
         self.logger.info("Trying to get latest updates for bot "+self.name)
         p=self.updater.bot.get_updates(offset=self.offset)
+
         if len(p)>0:
             for update in p:
-                logger.info("Got message {} from user {}, id {}".format(update.message.text,update.message.from_user.first_name,update.message.from_user.id))
+                self.logger.info("Got message {} from user {}, id {}".format(update.message.text,update.message.from_user.first_name,update.message.from_user.id))
+                uids = [user['id'] for user in self.users]
+                if update.message.from_user.id not in uids:
+                    self.logger.info("Adding user to user list")
+                    self.users.append(json.loads(update.message.from_user.to_json()))
+                else:
+                    self.logger.info("User in list already")
             self.offset=p[-1].update_id+1
+            self.save_state()
+        else:
+            self.logger.info("No new messages received for bot " + self.name)
+
         return p
-    
