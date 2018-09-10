@@ -1,2 +1,4 @@
-sudo -H pip install json collections selenium BeautifulSoup bs4 ConfigParser time os urllib2 pygments shutil coloredlogs queuelib
+sudo -H pip install json collections selenium BeautifulSoup bs4 ConfigParser time os urllib2 pygments shutil coloredlogs queuelib telegram colored pygsheets python-telegram-bot googleapiclient
+
+clone mojomailman and link to /opt/mojomailman
 
