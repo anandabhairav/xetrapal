@@ -45,19 +45,21 @@ class XetrapalTelegramBot:
     def get_latest_updates(self):
         self.logger.info("Trying to get latest updates for bot "+self.name)
         p=self.updater.bot.get_updates(offset=self.offset)
-
         if len(p)>0:
             for update in p:
-                self.logger.info("Got message {} from user {}, id {}".format(update.message.text,update.message.from_user.first_name,update.message.from_user.id))
+                self.logger.info(u"Got message {}".format(update.to_json()))
+                
                 uids = [user['id'] for user in self.users]
-                if update.message.from_user.id not in uids:
-                    self.logger.info("Adding user to user list")
-                    self.users.append(json.loads(update.message.from_user.to_json()))
+                if update.message!=None:
+                    if update.message.from_user.id not in uids:
+                        self.logger.info("Adding user to user list")
+                        self.users.append(json.loads(update.message.from_user.to_json()))
+                    else:
+                        self.logger.info("User in list already")
                 else:
-                    self.logger.info("User in list already")
+                    self.logger.info("Special Message")
             self.offset=p[-1].update_id+1
             self.save_state()
         else:
             self.logger.info("No new messages received for bot " + self.name)
-
         return p
