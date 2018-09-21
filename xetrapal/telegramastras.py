@@ -57,7 +57,10 @@ class XetrapalTelegramBot:
                     else:
                         self.logger.info("User in list already")
                 else:
-                    self.logger.info("Special Message")
+                    if update.callback_query:
+                        self.logger.info("Callback query received")
+                    else:
+                        self.logger.info("Special Message")
             self.offset=p[-1].update_id+1
             self.save_state()
         else:
