@@ -11,7 +11,7 @@ import gdastras
 import gdkarmas
 import pykkakarta
 import os
-import mojomailastras
+#import mojomailastras
 import telegramastras
 import telegramkarmas
 #import thespiankarta
