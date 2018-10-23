@@ -1,4 +1,13 @@
-sudo -H pip install json collections selenium BeautifulSoup bs4 ConfigParser time os urllib2 pygments shutil coloredlogs queuelib telegram colored pygsheets python-telegram-bot googleapiclient
-
-clone mojomailman and link to /opt/mojomailman
-
+python_telegram_bot==7.0.1
+twython==3.6.0
+tweepy==3.6.0
+colored==1.3.5
+Pygments==2.1
+pygsheets==1.1.4
+thespian==3.9.2
+Pykka==1.2.1
+selenium==3.8.1
+coloredlogs==9.0
+pandas==0.17.1
+beautifulsoup4==4.6.3
+telegram==0.0.1
