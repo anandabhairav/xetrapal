@@ -74,7 +74,10 @@ class Jeeva(object):
 		self.logger.addHandler(fileHandler)
 		self.sessionlogfile=os.path.join(self.sessionpath,"jeevasession.log")
 		self.logger.info("Saving messages to log at " + colored.stylize(self.sessionlogfile,colored.fg("yellow")))
-
+		if os.path.exists(os.path.join(self.datapath,"xpal.log")):
+			os.remove(os.path.join(self.datapath,"xpal.log"))
+		os.symlink(self.sessionlogfile, os.path.join(self.datapath,"xpal.log"))
+		
 	def start_session(self):
 		sessionpathprefix=self.config.get("Jeeva","sessionpathprefix")
 		ts=datetime.now()

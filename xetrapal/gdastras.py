@@ -14,5 +14,5 @@ def get_googledriver(config,logger=astra.baselogger):
 		gd=pygsheets.authorize(outh_file=config.get("Pygsheets",'outhfile'),outh_nonlocal=True,outh_creds_store=config.get("Pygsheets",'outhstore'))
 		return gd
 	except Exception as e:
-		logger.error("Could not get twitter config because %s" %str(e))
+		logger.error("Could not get google driver config because %s" %str(e))
 		return None
