@@ -1,4 +1,4 @@
-#readme.md for xetrapal
+# Readme.md for xetrapal
 
 first clone the repository to your system :
 ```
