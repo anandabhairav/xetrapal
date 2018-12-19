@@ -1,5 +1,26 @@
-# xetrapal (क्षेत्रपाल)
-हिन्दी एवं अन्य भारतीय भाशाओं में इंटरनेट से सामग्री को साझा करने एवं स्वतंत्र रूप से विश्लेषण करने के उपकरण 
-Automation framework for web based task work, data analysis and mining, particularly in Indic languages
+#readme.md for xetrapal
 
+first clone the repository to your system :
+```
+git clone https://github.com/anandabhairav/xetrapal
+```
 
+install the dependencies:
+```
+cd xetrapal/
+sudo -H pip install -r requirements.txt
+sudo -H pip install configparser
+sudo -H pip install oauth2client
+```
+
+create the symbolic link of the file in /opt directory:
+```
+sudo ln -s /home/<username>/xetrapal /opt/xetrapal
+
+```
+In ipython:
+```
+import sys
+sys.path.append("/opt/xetrapal")
+import xetrapal
+```
