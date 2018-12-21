@@ -8,6 +8,7 @@ git clone https://github.com/anandabhairav/xetrapal
 install the dependencies:
 ```
 cd xetrapal/
+sudo apt install build-essential python python-dev
 sudo -H pip install -r requirements.txt
 sudo -H pip install configparser
 sudo -H pip install oauth2client
